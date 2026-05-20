@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmlands Flex — Intelligent Energy for Farms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --barn:    #EB5D44;
+      --hay:     #FACA6C;
+      --steel-blue: #8296D1;
+      --stone:   #C8C8B7;
+      --stone-light: #f5f3ed;
+      --black:   #0a0a0a;
+      --dark:    #141414;
+      --white:   #ffffff;
+      --muted:   #8a8880;
+      --lead:    #1e1e1e;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Nav ───────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--black);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 68px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--white); }
+
+    .btn-nav {
+      background: var(--barn);
+      color: var(--white);
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .btn-nav:hover { opacity: 0.88; }
+
+    /* ─── Hero ──────────────────────────────────────────────────────── */
+    .hero {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 140px 48px 100px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--barn);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: clamp(52px, 7.5vw, 100px);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      max-width: 900px;
+      margin-bottom: 32px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--barn);
+    }
+
+    .hero-sub {
+      font-size: clamp(17px, 1.9vw, 21px);
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+
+    .hero-body {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.75;
+      margin-bottom: 18px;
+      font-weight: 400;
+    }
+
+    .hero-body-spacer {
+      margin-bottom: 44px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--barn);
+      color: var(--white);
+      padding: 16px 36px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      display: inline-block;
+      transition: opacity 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      padding: 16px 36px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.25);
+      cursor: pointer;
+      display: inline-block;
+      transition: border-color 0.2s, color 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .btn-secondary:hover {
+      border-color: var(--white);
+      color: var(--white);
+    }
+
+    /* ─── Module Strip ──────────────────────────────────────────────── */
+    .module-strip {
+      background: var(--barn);
+      padding: 0 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .module-strip::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+      pointer-events: none;
+    }
+
+    .module-strip-header {
+      text-align: center;
+      padding: 28px 0 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .module-strip-header-text {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .module-card {
+      padding: 36px 32px 32px;
+      border-right: 1px solid rgba(255,255,255,0.15);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .module-card:nth-child(3n) { border-right: none; }
+    .module-card:nth-child(n+4) {
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .module-card:hover { background: rgba(255,255,255,0.06); }
+
+    .module-card::before {
+      content: attr(data-num);
+      position: absolute;
+      right: -4px;
+      bottom: -16px;
+      font-size: 88px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.06);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      pointer-events: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .module-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 10px;
+    }
+
+    .module-name {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .module-dev-badge {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 3px 8px;
+    }
+
+    .module-question {
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    /* ─── Section shared ─────────────────────────────────────────────── */
+    section {
+      padding: 100px 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .section-label {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--barn);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 4vw, 54px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      max-width: 640px;
+      margin-bottom: 18px;
+    }
+
+    .section-question {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.01em;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* ─── Feature Layout ─────────────────────────────────────────────── */
+    .feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .feature.reverse {
+      direction: rtl;
+    }
+    .feature.reverse > * {
+      direction: ltr;
+    }
+
+    .feature-desc {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-top: 14px;
+      margin-bottom: 24px;
+    }
+
+    .feature-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 26px;
+    }
+
+    .feature-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 5px 12px;
+    }
+
+    .feature-commercial {
+      margin-bottom: 22px;
+      padding-left: 20px;
+      border-left: 3px solid var(--steel-blue);
+    }
+
+    .feature-commercial-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--steel-blue);
+      margin-bottom: 6px;
+    }
+
+    .feature-commercial p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .feature-example {
+      margin-top: 20px;
+      padding: 16px 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .feature-example-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .feature-example p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .feature-why {
+      margin-top: 0;
+      margin-bottom: 22px;
+      padding-left: 20px;
+      border-left: 3px solid var(--barn);
+    }
+
+    .feature-why-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--barn);
+      margin-bottom: 6px;
+    }
+
+    .feature-why p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .feature-capabilities {
+      margin-bottom: 24px;
+    }
+
+    .feature-capabilities-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .cap-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cap-list li {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .cap-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--barn);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ─── UI Mockup Panels ───────────────────────────────────────────── */
+    .mockup-wrap {
+      position: relative;
+    }
+
+    .screenshot-chrome {
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.65), 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    .screenshot-chrome img {
+      width: 100%;
+      display: block;
+    }
+
+    .mockup-chrome {
+      background: var(--lead);
+      border: 1px solid rgba(255,255,255,0.10);
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.55), 0 8px 20px rgba(0,0,0,0.35);
+    }
+
+    .mockup-titlebar {
+      background: #111;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .mockup-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .mockup-dot-r { background: #ff5f56; }
+    .mockup-dot-y { background: #ffbd2e; }
+    .mockup-dot-g { background: #27c93f; }
+
+    .mockup-title-text {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      margin-left: 8px;
+      font-weight: 500;
+    }
+
+    .mockup-body {
+      padding: 24px;
+      background: #1a1a1a;
+    }
+
+    /* ─── Mockup internals ───────────────────────────────────────────── */
+    .mock-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .mock-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+    .mock-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .mock-value.ok   { color: #4ade80; }
+    .mock-value.warn { color: var(--hay); }
+    .mock-value.barn { color: var(--barn); }
+    .mock-value.blue { color: var(--steel-blue); }
+    .mock-bar-wrap {
+      height: 6px;
+      background: rgba(255,255,255,0.08);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .mock-bar {
+      height: 100%;
+      background: var(--barn);
+    }
+    .mock-bar.ok   { background: #4ade80; }
+    .mock-bar.blue { background: var(--steel-blue); }
+    .mock-bar.hay  { background: var(--hay); }
+    .mock-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 18px 0;
+    }
+    .mock-stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .mock-stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 12px;
+    }
+    .mock-stat-val {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .mock-stat-val.barn { color: var(--barn); }
+    .mock-stat-val.ok   { color: #4ade80; }
+    .mock-stat-val.blue { color: var(--steel-blue); }
+    .mock-stat-label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.35);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .mock-schedule-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .mock-schedule-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .mock-schedule-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+      flex: 1;
+    }
+    .mock-schedule-time {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+    }
+    .mock-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1px solid;
+    }
+    .mock-badge.active { color: #4ade80; border-color: #4ade80; }
+    .mock-badge.paused { color: var(--hay); border-color: var(--hay); }
+
+    /* ─── Coming Soon badge ──────────────────────────────────────────── */
+    .coming-soon-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--steel-blue);
+      border: 1px solid var(--steel-blue);
+      padding: 4px 10px;
+      margin-bottom: 16px;
+    }
+
+    /* ─── Section alternating backgrounds ───────────────────────────── */
+    .bg-black { background: var(--black); }
+    .bg-dark   { background: var(--dark); }
+
+    /* ─── Final CTA ──────────────────────────────────────────────────── */
+    .final-cta {
+      background: var(--barn);
+      padding: 120px 48px;
+      text-align: center;
+      border-bottom: none;
+    }
+
+    .final-cta h2 {
+      font-size: clamp(36px, 5vw, 68px);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      margin-bottom: 20px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .final-cta-sub {
+      font-size: 18px;
+      color: rgba(255,255,255,0.75);
+      max-width: 480px;
+      margin: 0 auto 48px;
+      line-height: 1.6;
+    }
+
+    .final-cta-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-cta-white {
+      background: var(--white);
+      color: var(--barn);
+      padding: 18px 44px;
+      font-size: 15px;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .btn-cta-white:hover { opacity: 0.9; }
+
+    .btn-cta-outline {
+      background: transparent;
+      color: var(--white);
+      padding: 18px 44px;
+      font-size: 15px;
+      font-weight: 800;
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.5);
+      display: inline-block;
+      transition: border-color 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .btn-cta-outline:hover { border-color: var(--white); }
+
+    /* ─── Footer ─────────────────────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      padding: 48px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ─── Responsive ─────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-right .nav-link { display: none; }
+      .hero { padding: 120px 24px 80px; }
+      section { padding: 72px 24px; }
+      .feature { grid-template-columns: 1fr; gap: 48px; }
+      .feature.reverse { direction: ltr; }
+      .module-grid { grid-template-columns: 1fr 1fr; }
+      footer { padding: 36px 24px; flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 600px) {
+      .module-grid { grid-template-columns: 1fr; }
+      .mock-stat-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ─────────────────────────────────────────────────────────── -->
+  <nav>
+    <a href="flexspotlight_flex.html" class="nav-logo">
+      <img src="assets/farmlands-flex-logo-white.svg" height="56" alt="Farmlands Flex" style="display:block;" />
+    </a>
+    <div class="nav-right">
+      <a href="#assure"       class="nav-link">Assure</a>
+      <a href="#schedule"     class="nav-link">Schedule</a>
+      <a href="#submetering"  class="nav-link">Submetering</a>
+      <a href="#reporting"    class="nav-link">Reporting</a>
+      <a href="#control"      class="nav-link">Control</a>
+      <a href="#tariff"       class="nav-link">Tariff</a>
+      <a href="#insights"     class="nav-link">Insights</a>
+      <a href="#simulator"    class="nav-link">Simulator</a>
+      <a href="#optimisation" class="nav-link">Optimisation</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ─────────────────────────────────────────────────────────── -->
+  <section class="hero bg-black" style="border-bottom:none; padding-bottom:0;">
+    <div class="container">
+      <p class="hero-eyebrow">Farmlands Flex</p>
+      <h1>Make your farm's energy<br><em>work harder.</em></h1>
+      <p class="hero-sub">
+        Farmlands Flex gives you complete visibility and control of your farm's energy — helping you cut costs, protect your investment, and get more from every dollar spent on electricity.
+      </p>
+      <p class="hero-body">
+        Most farm energy systems are installed and left to run — with no way to know if they're performing as promised, no easy control, and no visibility into where energy is being wasted.
+      </p>
+      <p class="hero-body hero-body-spacer">
+        Farmlands Flex changes that. Nine dedicated modules each answer a specific question, giving you the tools to understand, control, and optimise your energy from paddock to plant room.
+      </p>
+      <div class="hero-ctas">
+        <a href="https://forestlodge.energy/" class="btn-secondary">See the platform</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MODULE OVERVIEW STRIP ────────────────────────────────────────── -->
+  <div class="module-strip">
+    <div class="module-grid">
+      <a href="#assure"       class="module-card" data-num="01">
+        <p class="module-name">Flex:Assure</p>
+        <p class="module-question">Is my solar and battery system delivering what was promised?</p>
+      </a>
+      <a href="#schedule"     class="module-card" data-num="02">
+        <p class="module-name">Flex:Schedule</p>
+        <p class="module-question">Can I automate when my system charges and discharges?</p>
+      </a>
+      <a href="#submetering"  class="module-card" data-num="03">
+        <p class="module-name">Flex:Submetering</p>
+        <p class="module-question">Where is energy actually being used across my farm?</p>
+      </a>
+      <a href="#reporting"    class="module-card" data-num="04">
+        <p class="module-name">Flex:Reporting</p>
+        <p class="module-question">How do I know if my system is actually paying off?</p>
+      </a>
+      <a href="#control"      class="module-card" data-num="05">
+        <p class="module-name">Flex:Control</p>
+        <p class="module-question">Can I manage devices on the farm from anywhere?</p>
+      </a>
+      <a href="#tariff"       class="module-card" data-num="06">
+        <p class="module-name">Flex:Tariff</p>
+        <p class="module-question">Am I on the right tariff for the way I use energy?</p>
+      </a>
+      <a href="#insights"     class="module-card" data-num="07">
+        <p class="module-name">Flex:Insights</p>
+        <p class="module-question">What can I do to reduce what I'm spending on power?</p>
+      </a>
+      <a href="#simulator"    class="module-card" data-num="08">
+        <p class="module-name">Flex:Simulator</p>
+        <p class="module-question">How do I know if a new investment will stack up?</p>
+      </a>
+      <a href="#optimisation" class="module-card" data-num="09">
+        <p class="module-name">Flex:Optimisation</p>
+        <p class="module-question">Can the system manage itself automatically?</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── 01 FLEX:ASSURE ────────────────────────────────────────────────── -->
+  <section id="assure" class="bg-black">
+    <div class="container">
+      <div class="feature">
+        <div>
+          <p class="section-label">01 — Flex:Assure</p>
+          <h2 class="section-title">Know your system is performing as promised.</h2>
+          <p class="feature-desc">
+            Flex:Assure gives you continuous validation that your solar and battery system is performing against the design forecast. It compares real-world generation against expected output — and contextualises any shortfall, whether the cause is weather, shading, or a genuine system fault. You get confidence every day after installation, not just on day one.
+          </p>
+          <div class="feature-why">
+            <p class="feature-why-label">Why it matters</p>
+            <p>Without ongoing benchmarking, underperformance goes unnoticed for months. Flex:Assure catches it early — so you're not paying for a system that isn't working.</p>
+          </div>
+          <div class="feature-tags">
+            <span class="feature-tag">Solar</span>
+            <span class="feature-tag">Battery</span>
+            <span class="feature-tag">Performance</span>
+            <span class="feature-tag">Fault detection</span>
+          </div>
+          <div class="feature-example">
+            <p class="feature-example-label">On-farm example</p>
+            <p>Solar generation is down 14% on forecast. Flex:Assure attributes the shortfall to recorded cloud cover for the period — no fault found. Your Farmlands rep is automatically notified so nothing falls through the cracks.</p>
+          </div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="screenshot-chrome">
+            <img src="assets/Screenshot FlexAssure.png" alt="Flex:Assure" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 FLEX:SCHEDULE ──────────────────────────────────────────────── -->
+  <section id="schedule" class="bg-dark">
+    <div class="container">
+      <div class="feature reverse">
+        <div>
+          <p class="section-label">02 — Flex:Schedule</p>
+          <h2 class="section-title">Automate how your system runs — without complexity.</h2>
+          <p class="feature-desc">
+            Flex:Schedule lets you set simple, rule-based schedules for when your system charges from solar, when it draws from the battery, and when high-load equipment like irrigation pumps or milk vat cooling run. Set it once, and the system runs to your rules — around the clock, without manual input.
+          </p>
+          <div class="feature-why">
+            <p class="feature-why-label">Why it matters</p>
+            <p>Running high-draw loads at the wrong time of day costs more than it should. Scheduling puts you in control of when energy is used — so you're not paying peak rates for loads that don't need to run at peak times.</p>
+          </div>
+          <div class="feature-tags">
+            <span class="feature-tag">Battery</span>
+            <span class="feature-tag">Irrigation</span>
+            <span class="feature-tag">Dairy</span>
+            <span class="feature-tag">Automation</span>
+          </div>
+          <div class="feature-example">
+            <p class="feature-example-label">On-farm example</p>
+            <p>Battery charges from solar between 9am and 3pm. Irrigation pump is scheduled off during peak tariff hours (7–9am, 5–8pm). Milk vat cooling restarts at 11pm on overnight rate. All rules set in under five minutes.</p>
+          </div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="screenshot-chrome">
+            <img src="assets/Screenshot FlexScheduling.png" alt="Flex:Schedule" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 FLEX:SUBMETERING ───────────────────────────────────────────── -->
+  <section id="submetering" class="bg-black">
+    <div class="container">
+      <div class="feature">
+        <div>
+          <p class="section-label">03 — Flex:Submetering</p>
+          <h2 class="section-title">See exactly where energy is going on your farm.</h2>
+          <p class="feature-desc">
+            Flex:Submetering breaks your total energy consumption down by load — milking shed, irrigation, heat pumps, EV chargers, or any other circuit you want to monitor. Instead of one number at the boundary, you get a clear picture of what's using energy, when, and how much it's costing.
+          </p>
+          <div class="feature-why">
+            <p class="feature-why-label">Why it matters</p>
+            <p>You can't reduce what you can't see. Submetering reveals which loads are driving your bill — and which parts of the farm have the most to gain from optimisation or scheduling.</p>
+          </div>
+          <div class="feature-tags">
+            <span class="feature-tag">Milking shed</span>
+            <span class="feature-tag">Irrigation</span>
+            <span class="feature-tag">EV charging</span>
+            <span class="feature-tag">Heat pumps</span>
+          </div>
+          <div class="feature-example">
+            <p class="feature-example-label">On-farm example</p>
+            <p>Irrigation is responsible for 61% of total farm energy use. The milking shed accounts for 27%. Flex:Submetering identifies irrigation as the primary target for scheduling and tariff optimisation — a finding that wasn't visible from the main meter alone.</p>
+          </div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="screenshot-chrome">
+            <img src="assets/screenshot-load-monitoring.png" alt="Flex:Submetering" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 FLEX:REPORTING ─────────────────────────────────────────────── -->
+  <section id="reporting" class="bg-dark">
+    <div class="container">
+      <div class="feature reverse">
+        <div>
+          <p class="section-label">04 — Flex:Reporting</p>
+          <h2 class="section-title">Performance updates that keep you informed.</h2>
+          <p class="feature-desc">
+            Flex:Reporting delivers regular performance summaries — generation, consumption, savings, and system health — in a clear format that's useful without being overwhelming. Reports can go to you, your accountant, or your Farmlands rep. No spreadsheets, no manual interpretation needed.
+          </p>
+          <div class="feature-why">
+            <p class="feature-why-label">Why it matters</p>
+            <p>An energy investment needs to prove itself over time. Flex:Reporting creates the ongoing record that shows whether the system is delivering the return that was projected at installation.</p>
+          </div>
+          <div class="feature-tags">
+            <span class="feature-tag">Monthly reports</span>
+            <span class="feature-tag">Savings tracking</span>
+            <span class="feature-tag">ROI</span>
+            <span class="feature-tag">Automated</span>
+          </div>
+          <div class="feature-example">
+            <p class="feature-example-label">On-farm example</p>
+            <p>End-of-month report lands in your inbox: 4,812 kWh generated, $1,106 saved against grid import, system running at 98% of forecast. Your Farmlands rep gets the same report — so they're across performance without needing to call.</p>
+          </div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="screenshot-chrome">
+            <img src="assets/Screenshot FlexReporting.png" alt="Flex:Reporting" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 FLEX:CONTROL ───────────────────────────────────────────────── -->
+  <section id="control" class="bg-black">
+    <div class="container">
+      <div class="feature">
+        <div>
+          <p class="section-label">05 — Flex:Control</p>
+          <h2 class="section-title">Manage farm devices from anywhere.</h2>
+          <p class="feature-desc">
+            Flex:Control lets you remotely switch and manage devices across the farm — heat pumps, EV chargers, hot water systems, and more. Control is available from any device, at any time, with a full audit trail of every action taken. Whether you're in the cab or off-farm, the farm stays manageable.
+          </p>
+          <div class="feature-why">
+            <p class="feature-why-label">Why it matters</p>
+            <p>Being able to act on what the data is showing you is what turns visibility into value. Flex:Control closes the loop — so you're not just watching energy, you're managing it.</p>
+          </div>
+          <div class="feature-tags">
+            <span class="feature-tag">Heat pumps</span>
+            <span class="feature-tag">EV chargers</span>
+            <span class="feature-tag">Hot water</span>
+            <span class="feature-tag">Remote access</span>
+          </div>
+          <div class="feature-example">
+            <p class="feature-example-label">On-farm example</p>
+            <p>You're at the sale yards when the forecast shows a cold front incoming. You turn the woolshed heat pumps on remotely — they're warm before you get back. Full audit log records the action, time, and who authorised it.</p>
+          </div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="mockup-chrome">
+            <div class="mockup-titlebar">
+              <div class="mockup-dot mockup-dot-r"></div>
+              <div class="mockup-dot mockup-dot-y"></div>
+              <div class="mockup-dot mockup-dot-g"></div>
+              <span class="mockup-title-text">Flex:Control — Devices</span>
+            </div>
+            <div class="mockup-body">
+              <div class="mock-schedule-row">
+                <div class="mock-schedule-dot" style="background:#4ade80;"></div>
+                <span class="mock-schedule-name">Woolshed — Heat pump</span>
+                <span class="mock-schedule-time">22°C / Auto</span>
+                <span class="mock-badge active">On</span>
+              </div>
+              <div class="mock-schedule-row">
+                <div class="mock-schedule-dot" style="background:#4ade80;"></div>
+                <span class="mock-schedule-name">Yards — EV charger</span>
+                <span class="mock-schedule-time">7.4 kW</span>
+                <span class="mock-badge active">Charging</span>
+              </div>
+              <div class="mock-schedule-row">
+                <div class="mock-schedule-dot" style="background:var(--hay);"></div>
+                <span class="mock-schedule-name">Cottage — Hot water</span>
+                <span class="mock-schedule-time">Scheduled off</span>
+                <span class="mock-badge paused">Standby</span>
+              </div>
+              <div class="mock-divider"></div>
+              <div class="mock-row">
+                <span class="mock-label">Last action</span>
+                <span class="mock-value">Woolshed HP — On (P. Urlich, 14:32)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 06 FLEX:TARIFF ────────────────────────────────────────────────── -->
+  <section id="tariff" class="bg-dark">
+    <div class="container">
+      <div class="feature reverse">
+        <div>
+          <p class="section-label">06 — Flex:Tariff</p>
+          <h2 class="section-title">Make sure your tariff matches how you use energy.</h2>
+          <p class="feature-desc">
+            Flex:Tariff analyses your actual farm load profile against available tariff structures — and shows you in dollar terms whether you're on the right plan. Farms with large irrigation loads, time-shifted dairy operations, or battery storage often have options they're not aware of. Flex:Tariff makes them visible.
+          </p>
+          <div class="feature-commercial">
+            <p class="feature-commercial-label">Commercial impact</p>
+            <p>Tariff misalignment is one of the most common sources of avoidable cost on farm. Flex:Tariff identifies the gap and quantifies it — giving you and your Farmlands rep a clear basis to act.</p>
+          </div>
+          <div class="feature-tags">
+            <span class="feature-tag">Time-of-use</span>
+            <span class="feature-tag">Demand tariffs</span>
+            <span class="feature-tag">Tariff comparison</span>
+            <span class="feature-tag">Cost analysis</span>
+          </div>
+          <div class="feature-example">
+            <p class="feature-example-label">On-farm example</p>
+            <p>Flex:Tariff models the farm's irrigation load profile against three available plans. Switching to a time-of-use tariff and shifting irrigation outside peak hours shows a projected saving of $4,200 per year — against the current flat-rate plan.</p>
+          </div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="screenshot-chrome">
+            <img src="assets/Screenshot FlexTariff.png" alt="Flex:Tariff" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 07 FLEX:INSIGHTS ──────────────────────────────────────────────── -->
+  <section id="insights" class="bg-black">
+    <div class="container">
+      <div class="feature">
+        <div>
+          <p class="section-label">07 — Flex:Insights</p>
+          <h2 class="section-title">Turn farm energy data into decisions that save money.</h2>
+          <p class="feature-desc">
+            Flex:Insights surfaces the patterns and anomalies in your farm's energy data — and translates them into clear, actionable recommendations. Instead of raw numbers, you get specific findings: which load is running at the wrong time, which piece of equipment is drawing more than expected, where the biggest savings opportunities sit.
+          </p>
+          <div class="feature-why">
+            <p class="feature-why-label">Why it matters</p>
+            <p>Data without interpretation is noise. Flex:Insights does the analytical work — so you spend your time acting on findings, not digging through them.</p>
+          </div>
+          <div class="feature-tags">
+            <span class="feature-tag">Anomaly detection</span>
+            <span class="feature-tag">Recommendations</span>
+            <span class="feature-tag">Savings opportunities</span>
+            <span class="feature-tag">Load analysis</span>
+          </div>
+          <div class="feature-example">
+            <p class="feature-example-label">On-farm example</p>
+            <p>Flex:Insights flags that the irrigation pump is drawing 12% more than its rated load — consistent with a worn impeller. The finding saves a costly reactive repair by catching it during a planned maintenance window.</p>
+          </div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="mockup-chrome">
+            <div class="mockup-titlebar">
+              <div class="mockup-dot mockup-dot-r"></div>
+              <div class="mockup-dot mockup-dot-y"></div>
+              <div class="mockup-dot mockup-dot-g"></div>
+              <span class="mockup-title-text">Flex:Insights — 3 new findings</span>
+            </div>
+            <div class="mockup-body">
+              <div class="mock-schedule-row" style="padding:14px 0;">
+                <div class="mock-schedule-dot" style="background:var(--barn);"></div>
+                <div style="flex:1;">
+                  <div class="mock-schedule-name">Irrigation pump drawing +12% above rated load</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;">Possible worn impeller — check before season peak</div>
+                </div>
+              </div>
+              <div class="mock-schedule-row" style="padding:14px 0;">
+                <div class="mock-schedule-dot" style="background:var(--hay);"></div>
+                <div style="flex:1;">
+                  <div class="mock-schedule-name">Shifting irrigation off-peak saves est. $4,200/yr</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;">Based on current tariff and 14-day load profile</div>
+                </div>
+              </div>
+              <div class="mock-schedule-row" style="padding:14px 0;border:none;">
+                <div class="mock-schedule-dot" style="background:var(--steel-blue);"></div>
+                <div style="flex:1;">
+                  <div class="mock-schedule-name">Battery cycle count below optimal — review schedule</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;">Charge window may be too narrow for current solar output</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 08 FLEX:SIMULATOR ─────────────────────────────────────────────── -->
+  <section id="simulator" class="bg-dark">
+    <div class="container">
+      <div class="feature reverse">
+        <div>
+          <p class="section-label">08 — Flex:Simulator</p>
+          <h2 class="section-title">Model the return before you make the investment.</h2>
+          <p class="feature-desc">
+            Flex:Simulator runs what-if scenarios on your farm's actual energy data. Want to know what adding a battery would do to your bill? What if you added 20 kW more solar? What would the payback look like at current power prices versus a projected 15% tariff increase? Simulator answers those questions before you commit capital.
+          </p>
+          <div class="feature-commercial">
+            <p class="feature-commercial-label">Investment decision support</p>
+            <p>Farming is full of capital decisions that need to stack up over time. Flex:Simulator gives you and your Farmlands rep a shared, data-grounded basis for those conversations — not assumptions.</p>
+          </div>
+          <div class="feature-tags">
+            <span class="feature-tag">Battery sizing</span>
+            <span class="feature-tag">Solar expansion</span>
+            <span class="feature-tag">Payback modelling</span>
+            <span class="feature-tag">Scenario planning</span>
+          </div>
+          <div class="feature-example">
+            <p class="feature-example-label">On-farm example</p>
+            <p>Adding a 30 kWh battery: Simulator models $3,800/yr in additional savings on the current tariff, with a 7.9-year payback. At a 15% tariff increase scenario, payback shortens to 6.5 years.</p>
+          </div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="screenshot-chrome">
+            <img src="assets/Screenshot FlexSimulator.png" alt="Flex:Simulator" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 09 FLEX:OPTIMISATION ──────────────────────────────────────────── -->
+  <section id="optimisation" class="bg-black">
+    <div class="container">
+      <div class="feature">
+        <div>
+          <span class="coming-soon-badge">Coming soon</span>
+          <p class="section-label">09 — Flex:Optimisation</p>
+          <h2 class="section-title">Automated energy management. Set it and let it work.</h2>
+          <p class="feature-desc">
+            Flex:Optimisation moves beyond manual schedules to fully automated energy management — dynamically dispatching battery storage, adjusting controllable loads, and responding to real-time price signals to minimise cost without any ongoing input from you. The farm's energy runs itself.
+          </p>
+          <div class="feature-why">
+            <p class="feature-why-label">Why it matters</p>
+            <p>Manual scheduling captures value when conditions are predictable. Optimisation captures value when they aren't — responding to cloud, grid price spikes, or unexpected load without requiring anyone to act.</p>
+          </div>
+          <div class="feature-tags">
+            <span class="feature-tag">Automated dispatch</span>
+            <span class="feature-tag">Spot price response</span>
+            <span class="feature-tag">Battery management</span>
+            <span class="feature-tag">Demand response</span>
+          </div>
+          <div class="feature-example">
+            <p class="feature-example-label">On-farm example</p>
+            <p>A grid price spike at 5pm triggers automatic battery discharge to cover milking shed load — avoiding peak import entirely. Cloud cover at 2pm prompts early battery charging from the grid at a low rate. No manual input required, all decisions logged.</p>
+          </div>
+        </div>
+        <div class="mockup-wrap">
+          <div class="mockup-chrome">
+            <div class="mockup-titlebar">
+              <div class="mockup-dot mockup-dot-r"></div>
+              <div class="mockup-dot mockup-dot-y"></div>
+              <div class="mockup-dot mockup-dot-g"></div>
+              <span class="mockup-title-text">Flex:Optimisation — Today's dispatch log</span>
+            </div>
+            <div class="mockup-body">
+              <div class="mock-schedule-row" style="padding:12px 0;">
+                <div class="mock-schedule-dot" style="background:#4ade80;"></div>
+                <div style="flex:1;">
+                  <div class="mock-schedule-name">14:10 — Early battery charge triggered</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Cloud cover forecast — grid rate $0.08/kWh</div>
+                </div>
+              </div>
+              <div class="mock-schedule-row" style="padding:12px 0;">
+                <div class="mock-schedule-dot" style="background:var(--barn);"></div>
+                <div style="flex:1;">
+                  <div class="mock-schedule-name">17:04 — Battery discharge — peak price spike</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Spot price $0.48/kWh — milking shed covered from battery</div>
+                </div>
+              </div>
+              <div class="mock-schedule-row" style="padding:12px 0; border:none;">
+                <div class="mock-schedule-dot" style="background:var(--steel-blue);"></div>
+                <div style="flex:1;">
+                  <div class="mock-schedule-name">19:20 — Irrigation deferred — demand event</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Grid demand response signal received — rescheduled to 23:00</div>
+                </div>
+              </div>
+              <div class="mock-divider"></div>
+              <div class="mock-row">
+                <span class="mock-label">Est. saving today</span>
+                <span class="mock-value ok">$18.40</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────────────────────────── -->
+  <footer>
+    <a href="flexspotlight_flex.html" class="footer-logo">
+      <img src="assets/farmlands-flex-logo-white.svg" height="24" alt="Farmlands Flex" style="display:block;opacity:0.6;" />
+    </a>
+    <span class="footer-copy">© 2026 Farmlands Flex. Intelligent energy makes farms work harder.</span>
+    <div class="footer-links">
+      <a href="https://flex.co.nz">flex.co.nz</a>
+      <a href="https://www.farmlands.co.nz">Farmlands</a>
+    </div>
+  </footer>
+
+</body>
+</html>
